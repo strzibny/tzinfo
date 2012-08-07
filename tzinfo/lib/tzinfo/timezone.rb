@@ -74,7 +74,7 @@ module TZInfo
 
     # Adds an instance of a timezone to the @@loaded_zones
     def self.add(identifier, instance)
-      @@loaded_zones[instance.identifier] = instance
+      @@loaded_zones[identifier] = instance unless identifier.nil?
     end
     
     # Returns a timezone by its identifier (e.g. "Europe/London", 
@@ -83,16 +83,27 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone couldn't be found.
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
-      
-      unless instance  
-        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
 
-        if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present?
+      # Lazy loading, timezone may already be in index but without all data beeing loaded
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
+
+        # Checks if data has been loaded already
+        if instance and not instance.identifier
+          instance = nil
+        end
+
+        unless instance
+          raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
 
           # Use Zoneinfo tzdata files that ship with GNU/Linux
           instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(identifier))      
-          @@loaded_zones[instance.identifier] = instance   
-        else     
+          @@loaded_zones[instance.identifier] = instance  
+        end
+      end
+      
+      # Use Ruby files otherwise
+      unless instance  
+        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/   
 
           # Use Ruby db in /definitions that ship with this gem
           identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
@@ -123,7 +134,6 @@ module TZInfo
           rescue LoadError, NameError => e
             raise InvalidTimezoneIdentifier, e.message
           end
-        end
       end
       
       instance
@@ -159,7 +169,9 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones.
     def self.all_identifiers
-      if @@loaded_zones.size > 0
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
+        ZoneinfoIndexes.new
+        #puts @@loaded_zones
         @@loaded_zones.keys.sort
       else
         load_index
@@ -179,8 +191,9 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones that are based on data (are not links to other Timezones)..
     def self.all_data_zone_identifiers
-      if @@loaded_zones.size > 0
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
         # All zones from the system are beeing loaded as data timezones
+        ZoneinfoIndexes.new
         self.all_identifiers
       else
         load_index
@@ -200,7 +213,7 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones that are links to other Timezones.
     def self.all_linked_zone_identifiers
-      if @@loaded_zones.size > 0
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
         # All zones from the system are beeing loaded as data timezones
         []
       else

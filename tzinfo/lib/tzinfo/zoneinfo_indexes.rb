@@ -20,18 +20,15 @@
 # THE SOFTWARE.
 #++
 
-#require 'tzinfo/zoneinfo_timezone_info'
-#require 'tzinfo/tzdataparser'
-
 module TZInfo
   class ZoneinfoIndexes
 
-    @@index_used = false
+    @@zoneinfo_loaded = false
   
     def initialize()
-      if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present?# and @@index_loaded == false
-      @@index_used = true
-
+      if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present? and not @@zoneinfo_loaded
+      @@zoneinfo_loaded = true
+      puts 'loads'
       @zones = {}
       @countries = {}
       @timezones = []
@@ -60,37 +57,18 @@ module TZInfo
         unless /\./.match(file)
           @zones[file] = TZDataZone.new(file) 
 
-          #info = TZInfo::DataTimezoneInfo.new(file)
-          #ZoneinfoTimezoneInfo.new(identifier)
-          #instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(identifier))
-          instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(file))
+          # Loads all zone info at once, changed to use lazy loading for performance reasons
+          # so it loads timezone but does not parse any binary file
+          #instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(file))
+          instance = DataTimezone.new(TimezoneInfo.new(nil))
           
           TZInfo::Timezone.add(file, instance)
-          #TZInfo::Timezone.add(file, ZoneinfoTimezoneInfo.new(file))
         end
       end                            
     end
 
     # Loads all timezone files from file names in the given directory and saves them in @zones
     def load_zones(directory)
-      puts 'yes'
-      dir = Dir.new(@input_dir + File::SEPARATOR + directory)
-
-      dir.each {|x|
-        zone = directory + File::SEPARATOR + x
-
-        if File.directory?(@input_dir + File::SEPARATOR + directory + File::SEPARATOR + x)
-          puts zone
-          load_zones(zone) unless /\./.match(zone)
-        else
-          load_zone(zone)
-        end    
-      }               
-    end
-
-    # Loads timezone files from file names in the given directory and saves them in @zones for a specific country
-    # Due to performance reasons, loading all zones is time consuming
-    def load_zones_for_country(directory, country)
       dir = Dir.new(@input_dir + File::SEPARATOR + directory)
 
       dir.each {|x|

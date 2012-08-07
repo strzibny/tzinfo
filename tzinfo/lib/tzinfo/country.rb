@@ -58,20 +58,21 @@ module TZInfo
     def self.get(identifier)
       instance = @@countries[identifier]
 
-      #unless instance
+      # Loads country from zoneinfo if possible
+      unless instance and ZoneinfoTimezoneInfo.zoneinfo_present?
+        ZoneinfoIndexes.new
+        instance = @@countries[identifier]
+      end
 
-        #TZInfo::ZoneinfoIndexes.new
-        #instance = @@countries[identifier]
-
-        unless instance
+      # Otherwise use Ruby database
+      unless instance
         load_index
         info = Indexes::Countries.countries[identifier]        
         raise InvalidCountryCode.new, 'Invalid identifier' unless info
         instance = Country.new(info)
 
         @@countries[identifier] = instance
-        end
-      #end      
+      end     
       
       instance        
     end
@@ -90,7 +91,8 @@ module TZInfo
     
     # Returns an Array of all the valid country codes.
     def self.all_codes
-      if @@countries.size > 0
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
+        ZoneinfoIndexes.new
         @@countries.keys
       else
         load_index
@@ -100,7 +102,8 @@ module TZInfo
     
     # Returns an Array of all the defined Countries.
     def self.all
-      if @@countries.size > 0
+      if ZoneinfoTimezoneInfo.zoneinfo_present?
+        ZoneinfoIndexes.new
         @@countries.keys.collect {|code| get(code)}
       else
         load_index
