@@ -11,7 +11,7 @@ in form of Ruby modules imported using TZDataParser and packaged with this relea
 TZInfo looks for zoneinfo database on your machine in '/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', and '/etc/zoneinfo'.
 If you have installed zoneinfo somewhere else, set the correct path with:
 
-  TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = 'PATH'
+  TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir='PATH'
 
 By setting empty path ('') you can force TZInfo to use Ruby modules instead of zoneinfo database.
 

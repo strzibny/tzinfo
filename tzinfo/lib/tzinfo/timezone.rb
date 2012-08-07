@@ -171,7 +171,6 @@ module TZInfo
     def self.all_identifiers
       if ZoneinfoTimezoneInfo.zoneinfo_present?
         ZoneinfoIndexes.new
-        #puts @@loaded_zones
         @@loaded_zones.keys.sort
       else
         load_index

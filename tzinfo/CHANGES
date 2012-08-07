@@ -1,3 +1,41 @@
+== Version zoneinfo
+* WARNING: all timezones from zoneinfo db are loaded as data timezones (instead of both
+  data and linked timezones). This shouldn't matter unless you somehow work with linked
+  timezones in your code. You can force to use Ruby modules with linked timezones by
+  setting zoneinfo_dir to empty string:
+  TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = ''
+* Added TZInfo::ZoneinfoTimezoneInfo class
+  ZoneinfoTimezoneInfo finds the path to zoneinfo database and loads all transitions
+  and offsets for given timezone by parsing binary tzdata files of zoneinfo.
+  It basically substitute original Ruby definitions of timezones (/tzinfo/definitions).
+* Added TZInfo::ZoneinfoIndexes class
+  ZoneinfoIndexes loads all countries and timezones from iso3166.tab and zone.tab
+  files of zoneinfo, but doesn't load timezone additional info (transitions and offsets)
+  for performance reasons. It basically substitute original Ruby indexes (/tzinfo/indexes).
+* TZInfo::Country class changed to prefer zoneinfo db if available
+  Changed methods:
+  + self.get
+  + self.all_codes
+  + self.all
+  New method:
+  + self.add # for adding countries to index
+* TZInfo::Timezone class changed to prefer zoneinfo db if available
+  Changed methods:
+  + self.get # now loads timezone info for timezones that are already in @@loaded_zones index,
+               but without loaded info class
+  + self.all_identifiers
+  + self.all_data_zone_identifiers # all timezones are data timezones when using zoneinfo
+  + self.all_linked_zone_identifiers # no timezones are linked timezones when using zoneinfo
+  New method:
+  + self.add # for adding zones to index
+* Tests changed
+  - tc_country.rb and tc_timezone.rb are forced to use TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = ''
+    to test original Ruby modules as before
+  - tc_zoneinfo_country and tc_zoneinfo_timezone.rb are added to the test suite to test
+    getting countries and timezones from zoneinfo db. They are the same as tc_country.rb
+    and tc_timezone.rb, but don't expect usage of linked timezones
+  - All tests passed
+
 == Version ?????? (tzdata v?????) - ??????????
 
 * Updated to tzdata version 2008i

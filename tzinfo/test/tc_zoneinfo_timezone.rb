@@ -154,7 +154,7 @@ class TCZoneinfoTimezone < Test::Unit::TestCase
   def test_new_arg_not_exist    
     assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
   end 
-
+  
   def test_all_linked_zones
     all_linked = Timezone.all_linked_zones
     expected = []
@@ -165,7 +165,6 @@ class TCZoneinfoTimezone < Test::Unit::TestCase
     all_linked = Timezone.all_linked_zone_identifiers
     assert_equal([], all_linked)
   end
-
 
   def test_all_country_zones
     # Probably should relax this test - just need all the zones, don't care

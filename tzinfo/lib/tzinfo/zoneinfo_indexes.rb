@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #++
+require 'tzinfo/zoneinfo_timezone_info'
+require 'tzinfo/tzdataparser'
 
 module TZInfo
   class ZoneinfoIndexes
@@ -28,7 +30,6 @@ module TZInfo
     def initialize()
       if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present? and not @@zoneinfo_loaded
       @@zoneinfo_loaded = true
-      puts 'loads'
       @zones = {}
       @countries = {}
       @timezones = []
