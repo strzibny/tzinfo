@@ -13,7 +13,7 @@ require 'tzinfo/zoneinfo_indexes'
 
 include TZInfo
 
-class TCTimezone < Test::Unit::TestCase
+class TCZoneinfoTimezone < Test::Unit::TestCase
 
   class BlockCalled < StandardError
   end
@@ -43,7 +43,7 @@ class TCTimezone < Test::Unit::TestCase
     
     private
       def setup(identifier, period_for_utc, periods_for_local, expected)
-        TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = ''
+        TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = nil
         @identifier = identifier
         @period_for_utc = period_for_utc
         @periods_for_local = periods_for_local || []
@@ -56,13 +56,6 @@ class TCTimezone < Test::Unit::TestCase
     
     assert_kind_of(DataTimezone, tz)
     assert_equal('Europe/London', tz.identifier)
-  end
-  
-  def test_get_valid_2
-    tz = Timezone.get('UTC')
-    
-    assert_kind_of(LinkedTimezone, tz)    
-    assert_equal('UTC', tz.identifier)
   end
   
   def test_get_valid_3
@@ -162,38 +155,17 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
   end 
 
-  def test_all    
-    all = Timezone.all
-    expected = Indexes::Timezones.timezones.collect {|identifier| Timezone.get_proxy(identifier)}
-    assert_equal(expected, all)
-  end
-  
-  def test_all_identifiers
-    all = Timezone.all_identifiers
-    assert_equal(Indexes::Timezones.timezones, all)
-  end
-  
-  def test_all_data_zones
-    all_data = Timezone.all_data_zones
-    expected = Indexes::Timezones.data_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
-    assert_equal(expected, all_data)
-  end
-  
-  def test_all_data_zone_identifiers
-    all_data = Timezone.all_data_zone_identifiers
-    assert_equal(Indexes::Timezones.data_timezones, all_data)
-  end
-  
   def test_all_linked_zones
     all_linked = Timezone.all_linked_zones
-    expected = Indexes::Timezones.linked_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = []
     assert_equal(expected, all_linked)
   end
   
   def test_all_linked_zone_identifiers
     all_linked = Timezone.all_linked_zone_identifiers
-    assert_equal(Indexes::Timezones.linked_timezones, all_linked)
+    assert_equal([], all_linked)
   end
+
 
   def test_all_country_zones
     # Probably should relax this test - just need all the zones, don't care

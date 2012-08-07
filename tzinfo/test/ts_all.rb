@@ -3,4 +3,5 @@
 ENV['TZ'] = 'America/Los_Angeles'
 
 require 'test/unit'
+
 Dir[File.join(File.dirname(__FILE__), 'tc_*.rb')].each {|t| require t}
