@@ -156,14 +156,18 @@ class TCZoneinfoTimezone < Test::Unit::TestCase
   end 
   
   def test_all_linked_zones
-    all_linked = Timezone.all_linked_zones
-    expected = []
-    assert_equal(expected, all_linked)
+    if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present?
+      all_linked = Timezone.all_linked_zones
+      expected = []
+      assert_equal(expected, all_linked)
+    end
   end
   
   def test_all_linked_zone_identifiers
-    all_linked = Timezone.all_linked_zone_identifiers
-    assert_equal([], all_linked)
+    if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present?
+      all_linked = Timezone.all_linked_zone_identifiers
+      assert_equal([], all_linked)
+    end
   end
 
   def test_all_country_zones
