@@ -29,26 +29,25 @@ module TZInfo
   
     def initialize()
       if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present? and not @@zoneinfo_loaded
-      @@zoneinfo_loaded = true
-      @zones = {}
-      @countries = {}
-      @timezones = []
-      @input_dir = TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir
+        @@zoneinfo_loaded = true
+        @zones = {}
+        @countries = {}
+        @timezones = []
+        @input_dir = TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir
  
-      Dir.foreach(@input_dir) {|file|
-        if File.directory?(@input_dir + File::SEPARATOR + file)
-          @timezones_dirs = ['Africa','America', 'Antarctica','Arctic', 'Asia', 'Atlantic', 'Australia','Brazil',
+        Dir.foreach(@input_dir) {|file|
+          if File.directory?(@input_dir + File::SEPARATOR + file)
+            @timezones_dirs = ['Africa','America', 'Antarctica','Arctic', 'Asia', 'Atlantic', 'Australia','Brazil',
                              'Canada', 'Chile', 'Etc', 'Europe','Indian','Mexico','Mideast','Pacific','US']
-          if @timezones_dirs.include?(file)
-            load_zones(file)
-          end
-        else
-          load_zone(file) unless /posix/.match(file)
-        end
-            
-      }
+            if @timezones_dirs.include?(file)
+              load_zones(file)
+            end
+          else
+            load_zone(file) unless /posix/.match(file)
+          end     
+        }
 
-      load_countries_and_zones
+        load_countries_and_zones
       end
     end
 

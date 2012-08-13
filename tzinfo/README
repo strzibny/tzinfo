@@ -1,10 +1,10 @@
 = TZInfo -- Daylight-savings aware timezone support for Ruby
 
-TZInfo [http://tzinfo.rubyforge.org] uses zoneinfo database on Unix machines to provide
+TZInfo[http://tzinfo.rubyforge.org] uses zoneinfo database on Unix machines to provide
 daylight-savings aware transformations between times in different timezones.
 
-If zoneinfo is not present, TZInfo use the tz database (http://www.twinsun.com/tz/tz-link.htm)
-in form of Ruby modules imported using TZDataParser and packaged with this release.
+If zoneinfo is not present, TZInfo use the tzinfo-data gem that provides cross-platform tz database (http://www.twinsun.com/tz/tz-link.htm)
+in form of Ruby modules.
 
 == Zoneinfo
 
@@ -14,6 +14,7 @@ If you have installed zoneinfo somewhere else, set the correct path with:
   TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = 'PATH'
 
 By setting empty path ('') you can force TZInfo to use Ruby modules instead of zoneinfo database.
+In this case, you have to have tzinfo-data installed on your machine (Ruby database for tzinfo is now separated).
 
 == Example usage
 

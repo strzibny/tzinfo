@@ -30,8 +30,6 @@ PKG_FILES = FileList[
 RDOC_OPTIONS = %w[--exclude definitions --exclude indexes]
 RDOC_EXTRA_FILES = %w[README CHANGES]
 
-BUILD_TZ_CLASSES_DIR = 'lib/tzinfo.build_tz_classes'
-
 SPEC = Gem::Specification.new do |s|
   s.name = "tzinfo"
   s.version = PKG_VERSION
@@ -74,24 +72,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.options.concat RDOC_OPTIONS
   rdoc.rdoc_files.include(*RDOC_EXTRA_FILES) 
   rdoc.rdoc_files.include('lib')  
-end
-
-task :build_tz_modules do
-  require 'lib/tzinfo/tzdataparser'
-  
-  FileUtils.mkdir_p(BUILD_TZ_CLASSES_DIR)
-  begin  
-    #p = TZInfo::TZDataParser.new('/usr/share/zoneinfo', BUILD_TZ_CLASSES_DIR)
-
-    #p = TZInfo::TZDataParser.new('../data', BUILD_TZ_CLASSES_DIR)
-    p.execute
-    
-    ['indexes', 'definitions'].each {|dir|
-      sync_svn("#{BUILD_TZ_CLASSES_DIR}/#{dir}", "lib/tzinfo/#{dir}")
-    }        
-  ensure
-    FileUtils.rm_rf(BUILD_TZ_CLASSES_DIR)
-  end
 end
 
 def sync_svn(source_dir, target_dir)
@@ -160,20 +140,4 @@ def exec_svn(params)
   puts "svn #{params}"
   `svn #{params}`
   raise "SVN exited with status #$?" if $? != 0  
-end
-
-task :build_tz_module do
-  require 'lib/tzinfo/tzdataparser'
-  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
-  p.generate_countries = false
-  p.only_zones = [ENV['zone']]
-  p.execute
-end
-
-task :build_countries do
-  require 'lib/tzinfo/tzdataparser'
-  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
-  p.generate_countries = true
-  p.generate_zones = false
-  p.execute
 end

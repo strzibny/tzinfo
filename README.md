@@ -1,7 +1,7 @@
 ===== Aim ======
 
 Make ruby-tzinfo read timezone data preferably from system-wide zoneinfo tzdata files.
-If zoneinfo is not present on the system, read data from Ruby files that come with ruby-tzinfo.
+If zoneinfo is not present on the system, read data from tzinfo-data gem (installed separately).
 
 More on this: http://rubyforge.org/tracker/index.php?func=detail&aid=29620&group_id=894&atid=3525
 

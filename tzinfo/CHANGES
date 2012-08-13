@@ -1,3 +1,11 @@
+== Version just API - 13-Aug-2012
+* All data separated from this gem to tzinfo-data
+  - Changed Rakefile to reflect changes
+  - Changed load_index methods in country.rb and timezone.rb to search for tzinfo-data
+    if zoneinfo is not installed
+  - Changed self.get method for TZInfo::Country to reflect this change as well
+  - Tests passed only if tzinfo-data is installed; this need to be changed/patched
+
 == Version zoneinfo
 * WARNING: all timezones from zoneinfo db are loaded as data timezones (instead of both
   data and linked timezones). This shouldn't matter unless you somehow work with linked
