@@ -4,7 +4,8 @@
   - Changed load_index methods in country.rb and timezone.rb to search for tzinfo-data
     if zoneinfo is not installed
   - Changed self.get method for TZInfo::Country to reflect this change as well
-  - Tests passed only if tzinfo-data is installed; this need to be changed/patched
+  - Tests are devided into /test and /test/zoneinfo
+    rake test run only those that don't require zoneinfo, rake test-zoneinfo run the rest
 
 == Version zoneinfo
 * WARNING: all timezones from zoneinfo db are loaded as data timezones (instead of both
