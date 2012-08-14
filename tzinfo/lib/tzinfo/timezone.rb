@@ -96,7 +96,9 @@ module TZInfo
           raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
 
           # Use Zoneinfo tzdata files that ship with GNU/Linux
-          instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(identifier))      
+          instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(identifier)) 
+          raise InvalidTimezoneIdentifier, 'Invalid identifier' unless instance
+
           @@loaded_zones[instance.identifier] = instance  
         end
       end
@@ -107,34 +109,34 @@ module TZInfo
 
         # Use Ruby db in /definitions that ship with this gem
         identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
-        begin
-          
+
+        begin 
           # Load Ruby module with data for the given identifier (timezone)
           require 'tzinfo-data'
-          TZInfo::Data.load_definition(identifier)
-           
-          m = Definitions
-          identifier.split(/\//).each {|part|
-            m = m.const_get(part)
-          }
-          
-          info = m.get
-          
-          # Could make Timezone subclasses register an interest in an info
-          # type. Since there are currently only two however, there isn't
-          # much point.
-          if info.kind_of?(DataTimezoneInfo)
-            instance = DataTimezone.new(info)
-          elsif info.kind_of?(LinkedTimezoneInfo)
-            instance = LinkedTimezone.new(info)
-          else
-            raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
-          end
-          
-          @@loaded_zones[instance.identifier] = instance         
         rescue LoadError
-          raise InvalidTimezoneIdentifier, TZInfoDataNotFound, 'Ruby indexes cannot be found. Install tzinfo-data to use Ruby timezone database.'
+          raise TZInfoDataNotFound, 'Ruby indexes cannot be found. Install tzinfo-data to use Ruby timezone database.'
         end
+
+        TZInfo::Data.load_definition(identifier)
+        m = Definitions
+        identifier.split(/\//).each {|part|
+          m = m.const_get(part)
+        }
+          
+        info = m.get
+          
+        # Could make Timezone subclasses register an interest in an info
+        # type. Since there are currently only two however, there isn't
+        # much point.
+        if info.kind_of?(DataTimezoneInfo)
+          instance = DataTimezone.new(info)
+        elsif info.kind_of?(LinkedTimezoneInfo)
+          instance = LinkedTimezone.new(info)
+        else
+          raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
+        end
+          
+        @@loaded_zones[instance.identifier] = instance            
       end
       
       instance
@@ -538,8 +540,8 @@ module TZInfo
       # Loads in the index of timezones if it hasn't already been loaded.
       def self.load_index
         unless @@index_loaded
+          require 'tzinfo/timezone_index_definition'
           begin
-            require 'tzinfo/timezone_index_definition'
             require 'tzinfo-data'
             TZInfo::Data.load_timezone_index
           rescue LoadError

@@ -58,7 +58,7 @@ module TZInfo
         @zone_identifiers.freeze
       end
       
-      @zone_identifiers
+      @zone_identifiers.freeze
     end
     
     # Returns internal object state as a programmer-readable string.
@@ -77,7 +77,7 @@ module TZInfo
         @zones.freeze
       end
       
-      @zones
+      @zones.freeze
     end    
   end
 end

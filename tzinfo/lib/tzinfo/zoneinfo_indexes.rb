@@ -25,11 +25,11 @@ require 'tzinfo/tzdataparser'
 module TZInfo
   class ZoneinfoIndexes
 
-    @@zoneinfo_loaded = false
+    #@@zoneinfo_loaded = false
   
     def initialize()
-      if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present? and not @@zoneinfo_loaded
-        @@zoneinfo_loaded = true
+      if TZInfo::ZoneinfoTimezoneInfo.zoneinfo_present? #and not @@zoneinfo_loaded
+        #@@zoneinfo_loaded = true
         @zones = {}
         @countries = {}
         @timezones = []

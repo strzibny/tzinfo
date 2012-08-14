@@ -24,6 +24,7 @@ require 'tzinfo/country_info'
 require 'tzinfo/timezone'
 
 module TZInfo
+  
   # Thrown if zoneinfo is not present on the machine and tzinfo-data is not installed
   class TZInfoDataNotFound < StandardError
   end
@@ -41,10 +42,6 @@ module TZInfo
   #  us.zone_info
   class Country
     include Comparable
-
-    def initialize
-      
-    end
     
     # Defined countries.
     @@countries = {}
@@ -66,13 +63,14 @@ module TZInfo
       unless instance and ZoneinfoTimezoneInfo.zoneinfo_present? 
         ZoneinfoIndexes.new
         instance = @@countries[identifier]
+        raise InvalidCountryCode, 'Invalid identifier' unless instance
       end
 
       # Otherwise use Ruby database
       unless instance
         load_index
         info = Indexes::Countries.countries[identifier]        
-        raise InvalidCountryCode.new, 'Invalid identifier' unless info
+        raise InvalidCountryCode, 'Invalid identifier' unless info
         instance = Country.new(info)
 
         @@countries[identifier] = instance
@@ -196,8 +194,8 @@ module TZInfo
       # Loads in the index of countries if it hasn't already been loaded.
       def self.load_index
         unless @@index_loaded
+          require 'tzinfo/country_index_definition'
           begin
-            require 'tzinfo/country_index_definition'
             require 'tzinfo-data'
             TZInfo::Data.load_country_index
           rescue LoadError
