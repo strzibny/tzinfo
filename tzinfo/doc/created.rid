@@ -1,0 +1,26 @@
+Tue, 14 Aug 2012 07:57:59 -0700
+README	Mon, 13 Aug 2012 07:25:51 -0700
+CHANGES	Tue, 14 Aug 2012 07:51:57 -0700
+lib/tzinfo.rb	Mon, 13 Aug 2012 07:24:55 -0700
+lib/tzinfo/timezone_period.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/linked_timezone_info.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/country_index_definition.rb	Thu, 09 Aug 2012 02:38:41 -0700
+lib/tzinfo/timezone_definition.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/zoneinfo_timezone_info.rb	Thu, 09 Aug 2012 02:33:25 -0700
+lib/tzinfo/timezone_proxy.rb	Tue, 14 Aug 2012 03:28:21 -0700
+lib/tzinfo/ruby_core_support.rb	Mon, 06 Aug 2012 00:30:50 -0700
+lib/tzinfo/time_or_datetime.rb	Wed, 25 Jul 2012 06:39:34 -0700
+lib/tzinfo/offset_rationals.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/data_timezone_info.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/data_timezone.rb	Tue, 07 Aug 2012 05:07:00 -0700
+lib/tzinfo/tzdataparser.rb	Fri, 27 Jul 2012 02:20:57 -0700
+lib/tzinfo/linked_timezone.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/country.rb	Tue, 14 Aug 2012 06:19:05 -0700
+lib/tzinfo/timezone_offset_info.rb	Wed, 25 Jul 2012 06:39:34 -0700
+lib/tzinfo/country_timezone.rb	Tue, 14 Aug 2012 06:15:35 -0700
+lib/tzinfo/timezone_info.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/country_info.rb	Tue, 14 Aug 2012 06:18:54 -0700
+lib/tzinfo/info_timezone.rb	Tue, 07 Aug 2012 05:08:54 -0700
+lib/tzinfo/timezone_transition_info.rb	Wed, 25 Jul 2012 06:39:33 -0700
+lib/tzinfo/timezone_index_definition.rb	Thu, 09 Aug 2012 02:38:30 -0700
+lib/tzinfo/timezone.rb	Tue, 14 Aug 2012 03:37:19 -0700
