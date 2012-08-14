@@ -60,10 +60,12 @@ module TZInfo
       instance = @@countries[identifier]
 
       # Loads country from zoneinfo if possible
-      unless instance and ZoneinfoTimezoneInfo.zoneinfo_present? 
-        ZoneinfoIndexes.new
-        instance = @@countries[identifier]
-        raise InvalidCountryCode, 'Invalid identifier' unless instance
+      if ZoneinfoTimezoneInfo.zoneinfo_present? 
+        unless instance
+          ZoneinfoIndexes.new
+          instance = @@countries[identifier]
+          raise InvalidCountryCode, 'Invalid identifier' unless instance
+        end
       end
 
       # Otherwise use Ruby database
